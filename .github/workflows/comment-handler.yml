@@ -1,0 +1,29 @@
+name: Handle Merge Schedule Comments
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process-schedule-comment:
+    if: contains(github.event.comment.body, '@merge-at')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Process Schedule Comment
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-body: ${{ github.event.comment.body }}
+          pr-number: ${{ github.event.issue.number }}
+          repository: ${{ github.repository }}
+

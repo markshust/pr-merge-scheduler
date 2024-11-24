@@ -1,0 +1,27 @@
+name: Process Scheduled Merges
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  check-scheduled-merges:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Process Scheduled Merges
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          mode: 'scheduler'
+

@@ -1,0 +1,30 @@
+name: 'PR Merge Scheduler'
+description: 'Schedule PR merges at specific times using @merge-at commands'
+author: 'markshust'
+
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  mode:
+    description: 'Operation mode (comment or scheduler)'
+    required: false
+    default: 'comment'
+  comment-body:
+    description: 'Content of the comment'
+    required: false
+  pr-number:
+    description: 'Pull request number'
+    required: false
+  repository:
+    description: 'Repository name with owner'
+    required: false
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'clock'
+  color: 'blue'
+
